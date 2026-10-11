@@ -1,0 +1,32 @@
+{
+  "name": "Viral Prompt Lab",
+  "short_name": "Prompt Lab",
+  "description": "AI video prompts for Shorts, long stories, real and animated characters, Hindi stories and a UK audience section.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e1417",
+  "theme_color": "#0a7a6c",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
