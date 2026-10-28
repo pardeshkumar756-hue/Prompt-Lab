@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Prompt Lab – 400 stories</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap">
+<style>
+:root{--bg:#f6d3d8;--card:#fff7f4;--ink:#3b2616;--tweed:#6b4b34;--tie:#a3283f;--line:#e2b3ba;--clip:#fbe9e3;--thumb:#a3283f;--thumbink:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#2a1a1d;--card:#3a2526;--ink:#f6e6df;--tweed:#d9b48f;--tie:#ff7d93;--line:#58393d;--clip:#472e30;--thumb:#ff7d93;--thumbink:#2a1a1d}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Bricolage Grotesque',system-ui,sans-serif;line-height:1.5}
+header{padding:24px 16px 8px;max-width:720px;margin:auto}
+h1{font-size:30px;line-height:1.1;margin:0 0 6px;font-weight:800;color:var(--tweed)}
+header p{margin:4px 0;font-size:14px}
+.char{background:var(--card);border:2px solid var(--tweed);border-radius:14px;padding:10px 12px;margin:12px 0;font-size:13px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);padding:8px 16px;max-width:720px;margin:auto;z-index:5}
+input{width:100%;padding:12px;border-radius:10px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+main{max-width:720px;margin:auto;padding:8px 16px 40px}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:8px 0}
+summary{padding:12px 14px;cursor:pointer;font-weight:600;list-style:none}
+summary small{display:block;font-weight:400;opacity:.75}
+.body{padding:0 14px 14px}
+.p{background:var(--clip);border-radius:10px;padding:10px;margin:8px 0;font-size:13.5px}
+.p.t{background:var(--thumb);color:var(--thumbink)}
+.p b{display:block;margin-bottom:4px}
+button{margin-top:8px;border:0;border-radius:8px;background:var(--tie);color:#fff;padding:10px 14px;font:inherit;font-weight:600;cursor:pointer;min-height:40px}
+.p.t button{background:var(--thumbink);color:var(--thumb)}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid var(--tie);outline-offset:2px}
+.more{text-align:center;opacity:.8;font-size:13px;margin-top:16px}
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}.tabs button{margin:0;background:var(--card);color:var(--ink);border:2px solid var(--line);font-size:13px}.tabs button.on{background:var(--tie);color:#fff;border-color:var(--tie)}.nar{display:block;margin-top:6px;font-style:italic;color:var(--tweed)}</style></head><body>
+<header>
+<h1>Prompt Lab: 3D Dogs & Hindi Stories</h1>
+<p>400 viral stories in 4 sections. Every clip is 10 seconds, and the last prompt is the thumbnail.</p>
+<div class="char"><b>Main character (added to every prompt):</b> <span id="ch"></span></div>
+</header>
+<div class="bar"><div class="tabs" id="tabs"></div><input id="q" type="search" placeholder="Search: London, pigeon, rain…" aria-label="Search stories"></div>
+<main id="list"></main>
+<p class="more" id="count"></p>
+<script>
+
+const CHAR="Pixar-style 3D animated golden retriever standing upright like a person, fluffy golden fur, big expressive brown eyes, dark brown nose, curly feathered tail";
+document.getElementById('ch').textContent=CHAR+", wearing the outfit of the scene.";
+const P=[
+["London Tube platform","a brown tweed suit, red tie and brown briefcase","a busy London Underground platform with yellow safety line and rush-hour crowds"],
+["royal palace gates","a tiny red guard coat and tall black fur hat","the gates of a grand royal palace with stone pillars and tourists"],
+["red phone box street","a beige trench coat and flat cap","a cobbled London street with a classic red telephone box in light drizzle"],
+["Camden market","a leather jacket and round sunglasses","a colourful Camden market lane with street-food stalls and hanging lights"],
+["Brighton seaside","a striped deckchair-print shirt and straw hat","a Brighton pebble beach with pier, seagulls and a chip shop"],
+["Scottish Highlands","a green tartan kilt and woolly jumper","misty Scottish Highlands with purple heather and a picnic blanket"],
+["rainy football terrace","a blue football scarf and bobble hat","a rainy English football ground with fans in scarves and pies in hand"],
+["Cotswold village pub","a mustard waxed jacket and wellies","a cosy honey-stone Cotswold village pub with hanging baskets"],
+["Thames riverside bridge","a navy raincoat and yellow umbrella","a riverside bridge in London with a double-decker bus passing"],
+["English garden tea party","a cream blazer and bow tie","a neat English garden with a tea table, scones and bunting"]];
+const G=[
+["The Pigeon Heist",p=>`A cheeky pigeon swoops and steals the dog's sandwich mid-bite.`,p=>`The dog chases it in a dramatic slow-motion run, tie flapping, tripping over his own tail.`,p=>`The pigeon lands and eats it in front of him, the dog sighs and pulls out a tiny backup sandwich.`],
+["Umbrella Takeoff",p=>`A strong gust turns his umbrella inside out.`,p=>`He lifts off the ground, legs paddling, ears flapping like wings.`,p=>`He lands softly on a bench next to a stunned old lady, who offers him a biscuit.`],
+["Polite Queue Disaster",p=>`He queues very politely, tail wagging happily behind him.`,p=>`The wagging tail knocks over a pile of boxes like dominoes, he pretends not to notice.`,p=>`Everyone stares, he whispers 'sorry' and tips his hat, the crowd laughs and applauds.`],
+["The Big Sneeze",p=>`He tries to look very serious and important.`,p=>`A huge sneeze blasts his hat off and it spins through the air.`,p=>`It lands perfectly on a stranger's head, who bows, and the dog bows back.`],
+["Tail Chase Chaos",p=>`He spots his own tail and stares, confused.`,p=>`He chases it faster and faster, spinning like a tornado through everything nearby.`,p=>`He stops, dizzy, wobbles and falls flat, tail wagging proudly as if he won.`],
+["The Ball in the Briefcase",p=>`He answers a very serious phone call, nodding with a stern face.`,p=>`His briefcase pops open and a squeaky ball rolls out, his eyes follow it.`,p=>`He tries to stay professional but his paw twitches, then he dives after the ball mid-call.`],
+["Slippery Slide",p=>`A cleaner puts up a wet floor sign and walks away.`,p=>`He steps on the wet patch and slides along in a perfect cool pose, arms out.`,p=>`He glides past a crowd and stops exactly at the end, shrugs and bows.`],
+["Mistaken Identity",p=>`A tourist thinks he works here and asks him for directions.`,p=>`He confidently points the wrong way, then more tourists line up to ask him.`,p=>`He ends up leading a parade of tourists, wagging proudly with a tiny flag.`],
+["Stuck Treat",p=>`He finds a giant biscuit in a high spot and jumps for it.`,p=>`He grabs it but gets his head stuck, wobbling around blindly.`,p=>`He bumps into a friendly cat who gently pulls it free, and they share the biscuit.`],
+["Squirrel Stare-Off",p=>`A squirrel stares at him from a nearby ledge, unblinking.`,p=>`A dramatic western-style stare-off, with wind blowing and ears flicking.`,p=>`The squirrel steals his hat and runs away, the dog is left shocked, then laughs.`]];
+const HC="Pixar-style 3D animated Indian boy Chintu (8 years old, big eyes, messy black hair) and his fluffy golden retriever dog Moti";
+const HP=[
+["गाँव का मेला","a lively Indian village fair with swings, balloons and sweet stalls","Chintu in a kurta and Moti in a small red turban"],
+["चाय की टपरी","a busy roadside chai stall with steaming kettles and bicycles","Chintu in a sweater and Moti in a woolly muffler"],
+["स्कूल का मैदान","a sunny Indian school playground with a big banyan tree","Chintu in school uniform and Moti with a tiny school bag"],
+["रेलवे स्टेशन","a colourful Indian railway platform with porters and a train arriving","Chintu with a backpack and Moti wearing a cap"],
+["दिवाली का बाज़ार","a glowing Diwali market with diyas, lanterns and fireworks","Chintu in festive kurta pyjama and Moti with a flower garland"],
+["खेत और नहर","green farmland with a canal, bullock cart and mustard fields","Chintu in a farmer's gamchha and Moti with a straw hat"],
+["शादी की बारात","a joyful Indian wedding procession with band and horse","Chintu in a sherwani and Moti in a golden bow tie"],
+["पुराना किला","an old fort in Rajasthan with sandy walls and peacocks","Chintu in a colourful turban and Moti with a tiny cape"],
+["बारिश वाली गली","a narrow Indian lane in heavy monsoon rain with puddles","Chintu in a yellow raincoat and Moti in tiny red boots"],
+["आम का बाग","a mango orchard in summer with a rope swing","Chintu in shorts and a hat and Moti with a basket"]];
+const HS=[
+["चालाक मोती और लालची सेठ",[["लालची सेठ ने सारी मिठाई छुपा ली।","A greedy shopkeeper hides all the sweets behind his back."],["मोती ने नाक से मिठाई का डिब्बा ढूँढ लिया।","Moti sniffs out the hidden sweet box and drags it out."],["सेठ शर्मिंदा हुआ और सबको मिठाई बाँटी।","The shopkeeper blushes and shares the sweets with everyone."]],"लालच बुरी बला है।"],
+["डरपोक भूत",[["चिंटू ने चादर ओढ़कर भूत बनने का नाटक किया।","Chintu pretends to be a ghost under a white sheet."],["चादर में फँसकर वो खुद दीवार से टकरा गया।","He trips in the sheet and bumps into a wall, all wobbling."],["मोती ने चादर खींची और सब हँस पड़े।","Moti pulls the sheet off and everyone bursts out laughing."]],"मज़ाक वही अच्छा जिसमें सब हँसें।"],
+["जादुई छाता",[["चिंटू को एक पुराना जादुई छाता मिला।","Chintu finds an old glowing magic umbrella."],["छाता खोलते ही चीज़ें हवा में तैरने लगीं।","When opened, everything nearby floats up in the air."],["मोती भी तैरता हुआ आसमान में पहुँच गया।","Moti floats high in the sky, paws paddling, ears flapping."]],"हर चीज़ संभालकर इस्तेमाल करो।"],
+["बोलने वाला तोता",[["एक तोता हर बात दोहराने लगा।","A parrot starts repeating everything it hears."],["उसने चिंटू का सारा राज़ सबके सामने बोल दिया।","It loudly reveals Chintu's secret in front of everyone."],["मोती ने तोते को बिस्कुट देकर चुप कराया।","Moti gives the parrot a biscuit to quiet it down."]],"राज़ की बात राज़ ही रखो।"],
+["कछुए की दौड़",[["चिंटू ने कछुए से दौड़ लगाने की शर्त लगाई।","Chintu bets he can beat a tortoise in a race."],["वो आराम करने बैठ गया और सो गया।","He sits down for a nap, snoring, and Moti tries to wake him."],["कछुआ चुपचाप जीत गया, सब ताली बजाने लगे।","The tortoise crosses the finish line, the crowd cheers."]],"धीरे और लगातार चलने वाला जीतता है।"],
+["पतंग की लड़ाई",[["आसमान में पतंगों की लड़ाई चल रही थी।","Colourful kites fight in the sky."],["चिंटू की पतंग मोती की पूँछ में फँस गई।","Chintu's kite string tangles around Moti's tail."],["मोती पतंग के साथ उड़ चला और सबको हँसा गया।","Moti is dragged along like a kite, comedy chase, everyone laughs."]],"मुश्किल में भी हँसना सीखो।"],
+["सच्ची दोस्ती",[["चिंटू के पास सिर्फ़ एक रोटी थी।","Chintu has only one roti and sits happily."],["एक भूखा पिल्ला उसके पास आया।","A hungry puppy with big sad eyes approaches him."],["चिंटू ने आधी रोटी पिल्ले को दे दी।","Chintu shares half the roti, the puppy wags, Moti joins in."]],"बाँटने से खुशी बढ़ती है।"],
+["खोया हुआ बैग",[["चिंटू को रास्ते में एक बैग मिला।","Chintu finds a lost bag on the road."],["अंदर बहुत सारे पैसे देखकर वो सोच में पड़ गया।","He peeks inside and gasps at the money, Moti tilts his head."],["उसने बैग लौटा दिया और इनाम पाया।","He returns it to the owner, who rewards him with a big smile."]],"ईमानदारी सबसे बड़ा गुण है।"],
+["शेर की नक़ल",[["मोती ने शेर का मुखौटा पहन लिया।","Moti puts on a lion mask and a fluffy mane."],["उसे देखकर पूरा गाँव डरकर भागा।","The whole village runs away in funny panic."],["मुखौटा गिरा तो सब हँसते हुए लौट आए।","The mask falls off, everyone returns laughing."]],"असली बहादुरी दिल में होती है।"],
+["चाँद वाली रात",[["रात को तालाब में चाँद दिखा।","At night, a big moon reflects in a pond."],["चिंटू उसे पकड़ने कूद पड़ा, छपाक!","Chintu jumps to catch it, big splash!"],["मोती ने उसे बाहर खींचा और असली चाँद मुस्कुराया।","Moti pulls him out, the real moon seems to smile."]],"हर चमकती चीज़ सोना नहीं होती।"]];
+const fmt="vertical 9:16, soft cinematic lighting, funny expressive acting, high detail, no text on screen";
+const shuf=a=>a.sort((x,y)=>((x.i*37)%100)-((y.i*37)%100));
+function mk(kind){const out=[];
+if(kind[0]=='u'){const six=kind=='uk60';G.forEach((g,gi)=>P.forEach((pl,pi)=>{const[pn,o,set]=pl,c=CHAR+`, wearing ${o}. The scene is ${set}. `,e=" Same character, outfit and location in every clip. "+fmt;
+const t=[["Setup",c+g[1](pn)+e],["Escalation",c+g[2](pn)+e],["Punchline",c+g[3](pn)+e+" End on a funny frozen reaction."]];
+const cl=six?[["Intro",c+"The dog walks in confidently, establishing wide shot, funny strut."+e],["Setup",t[0][1]],["Trouble",t[1][1]],["Twist",c+"A grumpy bystander reacts and makes things even funnier and worse."+e],["Punchline",t[2][1]],["Happy ending",c+"The dog smiles warmly, camera slowly pulls back, callback to the opening."+e]]:t;
+out.push({i:out.length+1,t:g[0]+" – "+pn,sub:o,cl:cl,th:`YouTube thumbnail, ${CHAR}, wearing ${o}, shocked funny face, wide eyes, ${set}, funniest moment of "${g[0]}" frozen, bright saturated colours, rim light, vertical 9:16, no text`})}));}
+else{const six=kind=='hi60';HS.forEach((s,si)=>HP.forEach((pl,pi)=>{const[pn,set,o]=pl,c=HC+`. ${o}. The scene is ${set}. `,e=" Keep the characters consistent. "+fmt;
+const B=s[1].map(b=>[b[0],c+b[1]+e]);
+const cl=six?[["Intro",c+"Establishing shot of the place at golden hour, Chintu and Moti arrive happily."+e,pn+" में आज कुछ मज़ेदार होने वाला था।"],B[0].concat(),["Trouble",c+s[1][1][1]+e,s[1][1][0]],["Twist",c+"A new surprise problem appears and everyone reacts with comic shock."+e,"तभी एक नई मुसीबत आ गई।"],B[2],["Moral",c+"Warm happy ending, everyone smiles, camera pulls back at sunset."+e,s[2]]]:B;
+if(six){cl[1]=["Setup",B[0][1],s[1][0][0]];cl[4]=["Punchline",B[2][1],s[1][2][0]];}
+const L=six?cl:B.map((b,k)=>[["Setup","Escalation","Punchline"][k],b[1],s[1][k][0]]);
+out.push({i:out.length+1,t:s[0]+" – "+pn,sub:o,cl:L,th:`Viral YouTube thumbnail, ${HC}, ${o}, extremely shocked funny faces, ${set}, the funniest moment of "${s[0]}" frozen, bright saturated colours, rim light, vertical 9:16, no text`})}));}
+return shuf(out).map((s,i)=>(s.i=i+1,s))}
+const SEC={uk30:["UK Dogs 30s",mk('uk30')],uk60:["UK Dogs 60s",mk('uk60')],hi30:["Hindi 30s",mk('hi30')],hi60:["Hindi 60s",mk('hi60')]};
+let cur='uk30';
+const list=document.getElementById('list'),tabs=document.getElementById('tabs');
+const esc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+function cp(t,bt){const d=()=>{bt.textContent='Copied';setTimeout(()=>bt.textContent='Copy prompt',1500)};const f=()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy')}catch(e){}a.remove();d()};try{navigator.clipboard.writeText(t).then(d,f)}catch(x){f()}}
+function card(txt,lab,narr,th){const e=document.createElement('div');e.className='p'+(th?' t':'');e.innerHTML=`<b>${esc(lab)}</b>${esc(txt)}`+(narr?`<span class="nar">Hindi voiceover: ${esc(narr)}</span>`:'');const bt=document.createElement('button');bt.textContent='Copy prompt';bt.onclick=()=>cp(narr?txt+' Hindi voiceover: "'+narr+'"':txt,bt);e.appendChild(bt);return e}
+function render(f){list.innerHTML='';const S=SEC[cur][1];let c=0;
+S.filter(s=>(s.t+s.sub).toLowerCase().includes(f)).forEach(s=>{c++;const d=document.createElement('details');d.innerHTML=`<summary>${s.i}. ${esc(s.t)}<small>${esc(s.sub)}</small></summary><div class="body"></div>`;
+d.addEventListener('toggle',()=>{const b=d.querySelector('.body');if(d.open&&!b.children.length){s.cl.forEach((k,n)=>b.appendChild(card(k[1],`Clip ${n+1} (${n*10}–${n*10+10}s): ${k[0]}`,k[2],false)));b.appendChild(card(s.th,'Thumbnail (viral)','',true))}});list.appendChild(d)});
+document.getElementById('count').textContent=c+' of 100 stories. When all 100 are used, ask for the next 100.'}
+Object.keys(SEC).forEach(k=>{const b=document.createElement('button');b.textContent=SEC[k][0];b.onclick=()=>{cur=k;[...tabs.children].forEach(x=>x.classList.toggle('on',x==b));document.getElementById('ch').textContent=k[0]=='u'?CHAR:HC;render(document.getElementById('q').value.toLowerCase().trim())};if(k==cur)b.classList.add('on');tabs.appendChild(b)});
+document.getElementById('ch').textContent=CHAR;
+document.getElementById('q').addEventListener('input',e=>render(e.target.value.toLowerCase().trim()));
+render('');
+</script></body></html>
